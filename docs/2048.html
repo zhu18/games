@@ -168,7 +168,7 @@
   </audio>
    <!-- 音效：合成1024/2048时播放 -->
   <audio id="goodSound" preload="auto">
-    <source src="./sound/good.mp3" type="audio/mpeg">
+    <source src="" type="audio/mpeg">
   </audio>
   <div class="device-tip tip-keyboard">⌨️ 方向键控制方块移动</div>
   <div class="device-tip tip-touch">📱 滑动屏幕控制方块移动</div>
@@ -227,6 +227,11 @@
         this.finalHighScoreElement = document.getElementById('finalHighScore');
         this.mergeSound = document.getElementById('mergeSound');
         this.goodSound = document.getElementById('goodSound');
+
+        // 延迟加载音效
+        setTimeout(()=>{
+          this.goodSound.src='./sound/good.mp3'
+        },20000)
 
         this.bindEvents();
         this.spawnRandomTile();
@@ -541,7 +546,8 @@
     // 启动游戏
     const game = new NumberMergeGame();
   </script>
-    <script>
+<script>
+  setTimeout(()=>{
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
@@ -549,6 +555,7 @@ var _hmt = _hmt || [];
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
+  },5000)
 </script>
 
 </body>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小楠游戏大厅</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "微软雅黑", sans-serif;
+      background: linear-gradient(to bottom, #fdf6e3, #ffe4ec);
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #ffb347;
+      border-bottom: 4px solid #ff914d;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px #e86a33;
+    }
+
+    main{
+        height: 100vh;
+    }
+
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .game-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .game-card:hover {
+      transform: scale(1.05);
+    }
+
+    .game-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .game-card p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 0.9em;
+      color: #444;
+    }
+
+    footer {
+      background: #ffb347;
+      border-top: 4px solid #ff914d;
+      padding: 15px;
+      text-align: center;
+      position: fixed;
+        bottom: 0px;
+        width: 100%;
+    }
+
+    footer button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 20px;
+      background: #ff6f61;
+      color: white;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    footer button:hover {
+      background: #e85a50;
+    }
+
+    /* 弹窗样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      width: 80%;
+      max-width: 300px;
+      text-align: center;
+      border-radius: 15px;
+    }
+
+    .modal-content img {
+      width: 200px;
+      height: 200px;
+    }
+
+    .close {
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 小楠游戏大厅</h1>
+</header>
+
+<main>
+  <div class="game-list">
+    <div class="game-card" onclick="openGame('2048')">
+        <img src="./images/2048.png" alt="2048">
+
+      <p>2048 数字合成</p>
+    </div>
+
+    <div class="game-card" onclick="openGame('dxg')">
+      <img src="./images/dxg.png" alt="大西瓜">
+      <p>合成大西瓜</p>
+    </div>
+
+    <div class="game-card">
+      <div style="font-size: 65px;">❔</div>
+      <p>敬请期待</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <button onclick="openModal('group')">找群玩</button>
+  <button onclick="shareGame()">分享</button>
+  <button onclick="openModal('donate')">打赏作者</button>
+</footer>
+
+<!-- 弹窗 -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  function openGame(name) {
+    location=name+'.html'
+  }
+
+  function openModal(type) {
+    let body = document.getElementById("modal-body");
+    if(type === "group") {
+      body.innerHTML = "<h3>加入玩家交流群</h3><img src='https://api.qrserver.com/v1/create-qr-code/?data=GroupQRCode&size=200x200' alt='群二维码'>";
+    } else if(type === "donate") {
+      body.innerHTML = "<h3>请作者喝奶茶 🧋</h3><img src='https://api.qrserver.com/v1/create-qr-code/?data=DonateQRCode&size=200x200' alt='打赏二维码'>";
+    }
+    document.getElementById("modal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  function shareGame() {
+    if (navigator.share) {
+      navigator.share({
+        title: "卡通小游戏大厅",
+        text: "快来玩有趣的2048和合成大西瓜吧！",
+        url: window.location.href
+      });
+    } else {
+      alert("复制链接分享给好友：\n" + window.location.href);
+    }
+  }
+</script>
+
+</body>
+</html>
