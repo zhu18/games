@@ -12,7 +12,11 @@
       color: #776e65;
       margin: 0;
       padding: 20px;
-      touch-action: manipulation;
+      /* touch-action: manipulation; */
+      touch-action: pan-x pan-y pinch-zoom;
+       /* 防止页面整体滚动触发刷新 */
+      overflow: hidden;
+      height: 100vh;
     }
 
     h1 {
@@ -252,7 +256,7 @@
           }
 
           startX = startY = null;
-        }, { passive: true });
+        }, { passive: false });
       }
 
       move(direction) {
