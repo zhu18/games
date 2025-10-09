@@ -72,7 +72,7 @@
                     </label>
                     <textarea id="qrText" rows="4" placeholder="请输入网址、文字或其他内容..." 
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all resize-none"
-                              >https://example.com</textarea>
+                              >https://https://zhu18.github.io/games</textarea>
                     <p class="text-xs text-gray-500 mt-2">支持网址、文本、电话号码等内容</p>
                 </div>
                 
@@ -86,7 +86,7 @@
                             <i class="fa fa-upload mr-2"></i>选择图片
                             <input type="file" id="imageUpload" accept="image/*" class="hidden">
                         </label>
-                        <p class="text-xs text-gray-500 mt-2">支持JPG、PNG格式，建议大小不超过2MB</p>
+                        <p class="text-xs text-gray-500 mt-2">支持JPG、PNG格式，建议大小不超过10MB</p>
                     </div>
                     
                     <!-- 裁剪区域 (默认隐藏) -->
@@ -282,8 +282,8 @@
                 }
                 
                 // 检查文件大小
-                if (file.size > 2 * 1024 * 1024) { // 2MB
-                    showNotification('图片大小不能超过2MB', 'warning');
+                if (file.size > 10 * 1024 * 1024) { // 2MB
+                    showNotification('图片大小不能超过10MB', 'warning');
                     return;
                 }
                 
