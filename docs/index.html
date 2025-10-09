@@ -174,7 +174,8 @@
     if(type === "group") {
       body.innerHTML = "<h3>加入玩家交流群</h3><img src='https://api.qrserver.com/v1/create-qr-code/?data=GroupQRCode&size=200x200' alt='群二维码'>";
     } else if(type === "donate") {
-      body.innerHTML = "<h3>请作者喝奶茶 🧋</h3><img src='https://api.qrserver.com/v1/create-qr-code/?data=DonateQRCode&size=200x200' alt='打赏二维码'>";
+      //body.innerHTML = "<h3>请作者喝奶茶 🧋</h3><img src='https://api.qrserver.com/v1/create-qr-code/?data=DonateQRCode&size=200x200' alt='打赏二维码'>";
+      location='hnc.html'
     }
     document.getElementById("modal").style.display = "block";
   }
@@ -186,7 +187,7 @@
   function shareGame() {
     if (navigator.share) {
       navigator.share({
-        title: "卡通小游戏大厅",
+        title: "小楠游戏大厅",
         text: "快来玩有趣的2048和合成大西瓜吧！",
         url: window.location.href
       });

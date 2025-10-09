@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请作者喝奶茶</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B6B',
+                        secondary: '#FFD166',
+                        neutral: '#F8F9FA'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .shake {
+                animation: shake 0.5s ease-in-out;
+            }
+            .float {
+                animation: float 3s ease-in-out infinite;
+            }
+            .pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-md">
+        <!-- 头部 -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 float">
+                <i class="fa fa-coffee text-3xl text-primary"></i>
+            </div>
+            <h1 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-gray-800 mb-2">请作者喝奶茶</h1>
+            <p class="text-gray-600">您的支持是作者持续创作的动力~</p>
+        </div>
+        
+        <!-- 打赏卡片 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6 transform transition-all duration-300 hover:shadow-xl">
+            <!-- 金额选择 -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-3">选择金额</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button class="amount-btn py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all" data-amount="5">
+                        <span class="text-lg font-bold">¥5</span>
+                        <span class="text-xs text-gray-500 block mt-1">小杯奶茶</span>
+                    </button>
+                    <button class="amount-btn py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all" data-amount="10">
+                        <span class="text-lg font-bold">¥10</span>
+                        <span class="text-xs text-gray-500 block mt-1">中杯奶茶</span>
+                    </button>
+                    <button class="amount-btn py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all" data-amount="20">
+                        <span class="text-lg font-bold">¥20</span>
+                        <span class="text-xs text-gray-500 block mt-1">大杯奶茶</span>
+                    </button>
+                    <button class="amount-btn py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all" data-amount="30">
+                        <span class="text-lg font-bold">¥30</span>
+                        <span class="text-xs text-gray-500 block mt-1">奶茶+小食</span>
+                    </button>
+                    <button class="amount-btn py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all" data-amount="50">
+                        <span class="text-lg font-bold">¥50</span>
+                        <span class="text-xs text-gray-500 block mt-1">豪华套餐</span>
+                    </button>
+                    <button class="amount-btn py-3 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary hover:bg-primary/5 transition-all" data-amount="custom">
+                        <span class="text-lg font-bold">自定义</span>
+                        <span class="text-xs text-gray-500 block mt-1">随意金额</span>
+                    </button>
+                </div>
+                
+                <!-- 自定义金额输入框 (默认隐藏) -->
+                <div id="customAmountContainer" class="mt-4 hidden">
+                    <div class="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden">
+                        <span class="bg-gray-50 px-4 py-2 text-gray-600">¥</span>
+                        <input type="number" id="customAmount" placeholder="输入金额" 
+                               class="flex-1 px-4 py-2 outline-none text-gray-800" 
+                               min="1" step="1">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 支付方式 -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-3">选择支付方式</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="payment-method py-3 rounded-xl border-2 border-gray-200 flex items-center justify-center gap-2 hover:border-primary hover:bg-primary/5 transition-all" data-method="wechat">
+                        <i class="fa fa-weixin text-green-500 text-xl"></i>
+                        <span>微信支付</span>
+                    </button>
+                    <button class="payment-method py-3 rounded-xl border-2 border-gray-200 flex items-center justify-center gap-2 hover:border-primary hover:bg-primary/5 transition-all" data-method="alipay">
+                        <i class="fa fa-credit-card text-blue-500 text-xl"></i>
+                        <span>支付宝</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 留言框 -->
+            <div class="mb-6">
+                <label for="message" class="block text-gray-700 font-medium mb-2">想说的话 (可选)</label>
+                <textarea id="message" rows="2" placeholder="写下您的鼓励或建议..." 
+                          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"></textarea>
+            </div>
+            
+            <!-- 确认按钮 -->
+            <button id="confirmBtn" class="w-full py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                确认打赏 <i class="fa fa-heart ml-1"></i>
+            </button>
+        </div>
+        
+        
+    <!-- 支付弹窗 (默认隐藏) -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-gray-800">完成支付</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <p class="text-gray-600 mb-1">请使用<span id="methodName" class="font-medium">微信</span>扫描二维码</p>
+                    <p class="text-gray-500 text-sm">支付金额: <span id="paymentAmount" class="text-primary font-bold">¥20</span></p>
+                </div>
+                
+                <div class="flex justify-center mb-6">
+                    <div class="w-56 h-56 bg-gray-100 rounded-lg flex items-center justify-center p-4">
+                        <!-- 这里是支付二维码占位 -->
+                        <div class="w-full h-full flex items-center justify-center">
+                            <img src="./images/wx_skm.png" alt="支付二维码" class="w-full h-full object-cover rounded">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-amber-50 border border-amber-100 rounded-lg p-3 text-sm text-amber-700 flex items-start">
+                    <i class="fa fa-info-circle mt-0.5 mr-2"></i>
+                    <p>支付完成后请等待几秒，页面将自动刷新确认</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 成功提示 (默认隐藏) -->
+    <div id="successToast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 z-50 hidden opacity-0 transition-all duration-300">
+        <i class="fa fa-check-circle"></i>
+        <span>打赏成功！非常感谢您的支持~</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const amountBtns = document.querySelectorAll('.amount-btn');
+            const customAmountContainer = document.getElementById('customAmountContainer');
+            const customAmount = document.getElementById('customAmount');
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            const confirmBtn = document.getElementById('confirmBtn');
+            const paymentModal = document.getElementById('paymentModal');
+            const modalContent = document.getElementById('modalContent');
+            const closeModal = document.getElementById('closeModal');
+            const methodName = document.getElementById('methodName');
+            const paymentAmount = document.getElementById('paymentAmount');
+            const successToast = document.getElementById('successToast');
+            
+            // 状态变量
+            let selectedAmount = null;
+            let selectedMethod = null;
+            
+            // 金额选择
+            amountBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 重置所有按钮样式
+                    amountBtns.forEach(b => {
+                        b.classList.remove('border-primary', 'bg-primary/5');
+                        b.classList.add('border-gray-200');
+                    });
+                    
+                    // 设置当前按钮样式
+                    this.classList.remove('border-gray-200');
+                    this.classList.add('border-primary', 'bg-primary/5');
+                    
+                    const amount = this.getAttribute('data-amount');
+                    selectedAmount = amount;
+                    
+                    // 显示/隐藏自定义金额输入框
+                    if (amount === 'custom') {
+                        customAmountContainer.classList.remove('hidden');
+                        customAmount.focus();
+                        selectedAmount = null; // 重置，等待输入
+                    } else {
+                        customAmountContainer.classList.add('hidden');
+                        selectedAmount = amount;
+                    }
+                    
+                    checkConfirmEnabled();
+                });
+            });
+            
+            // 自定义金额输入
+            customAmount.addEventListener('input', function() {
+                if (this.value && this.value >= 1) {
+                    selectedAmount = this.value;
+                } else {
+                    selectedAmount = null;
+                }
+                checkConfirmEnabled();
+            });
+            
+            // 支付方式选择
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // 重置所有支付方式样式
+                    paymentMethods.forEach(m => {
+                        m.classList.remove('border-primary', 'bg-primary/5');
+                        m.classList.add('border-gray-200');
+                    });
+                    
+                    // 设置当前支付方式样式
+                    this.classList.remove('border-gray-200');
+                    this.classList.add('border-primary', 'bg-primary/5');
+                    
+                    selectedMethod = this.getAttribute('data-method');
+                    checkConfirmEnabled();
+                });
+            });
+            
+            // 检查确认按钮是否可点击
+            function checkConfirmEnabled() {
+                if (selectedAmount && selectedMethod) {
+                    confirmBtn.removeAttribute('disabled');
+                } else {
+                    confirmBtn.setAttribute('disabled', 'true');
+                }
+            }
+            
+            // 打开支付弹窗
+            confirmBtn.addEventListener('click', function() {
+                // 设置弹窗内容
+                if (selectedMethod === 'wechat') {
+                    methodName.textContent = '微信';
+                } else if (selectedMethod === 'alipay') {
+                    methodName.textContent = '支付宝';
+                }
+                
+                paymentAmount.textContent = `¥${selectedAmount}`;
+                
+                // 显示弹窗并添加动画
+                paymentModal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 50);
+                
+                // 模拟支付成功（实际项目中应根据真实支付结果处理）
+                setTimeout(() => {
+                    closeModal.click();
+                    showSuccessToast();
+                }, 8000); // 8秒后模拟支付成功
+            });
+            
+            // 关闭支付弹窗
+            closeModal.addEventListener('click', function() {
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    paymentModal.classList.add('hidden');
+                }, 300);
+            });
+            
+            // 点击弹窗外部关闭
+            paymentModal.addEventListener('click', function(e) {
+                if (e.target === paymentModal) {
+                    closeModal.click();
+                }
+            });
+            
+            // 显示成功提示
+            function showSuccessToast() {
+                successToast.classList.remove('hidden');
+                setTimeout(() => {
+                    successToast.classList.add('opacity-100');
+                }, 100);
+                
+                // 3秒后隐藏提示
+                setTimeout(() => {
+                    successToast.classList.remove('opacity-100');
+                    setTimeout(() => {
+                        successToast.classList.add('hidden');
+                    }, 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

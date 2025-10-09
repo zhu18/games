@@ -151,7 +151,7 @@
         // 播放合成声音
         const mergeSound = document.getElementById('mergeSound');
         function playMergeSound() {
-            mergeSound.currentTime = 0;
+            mergeSound.currentTime = 0.1;
             mergeSound.play().catch(() => {}); // 忽略自动播放限制错误
          }
         // 等待DOM加载完成
