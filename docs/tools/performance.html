@@ -155,7 +155,7 @@
                 <div id="cpuTesting" class="hidden">
                     <div class="flex justify-center items-center py-4">
                         <div class="text-center">
-                            <div class="inline-block w-8 h-8 border-2 border-primary border-t-transparent rounded-full pulse animate-spin mb-2"></div>
+                            <div class="inline-block w-8 h-8 border-2 border-primary border-t-transparent rounded-full  animate-spin mb-2"></div>
                             <p class="text-sm text-gray-600">正在测试CPU性能...</p>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                 <div id="memoryTesting" class="hidden">
                     <div class="flex justify-center items-center py-4">
                         <div class="text-center">
-                            <div class="inline-block w-8 h-8 border-2 border-success border-t-transparent rounded-full pulse animate-spin mb-2"></div>
+                            <div class="inline-block w-8 h-8 border-2 border-success border-t-transparent rounded-full  animate-spin mb-2"></div>
                             <p class="text-sm text-gray-600">正在测试内存性能...</p>
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                 <div id="gpuTesting" class="hidden">
                     <div class="flex justify-center items-center py-4">
                         <div class="text-center">
-                            <div class="inline-block w-8 h-8 border-2 border-purple border-t-transparent rounded-full pulse animate-spin mb-2"></div>
+                            <div class="inline-block w-8 h-8 border-2 border-purple border-t-transparent rounded-full  animate-spin mb-2"></div>
                             <p class="text-sm text-gray-600">正在测试显卡性能...</p>
                         </div>
                     </div>
@@ -275,7 +275,7 @@
                 <div id="networkTesting" class="hidden">
                     <div class="flex justify-center items-center py-4">
                         <div class="text-center">
-                            <div class="inline-block w-8 h-8 border-2 border-warning border-t-transparent rounded-full pulse animate-spin mb-2"></div>
+                            <div class="inline-block w-8 h-8 border-2 border-warning border-t-transparent rounded-full  animate-spin mb-2"></div>
                             <p class="text-sm text-gray-600">正在测试网络速度...</p>
                         </div>
                     </div>
@@ -322,7 +322,7 @@
                 <div id="batteryTesting" class="hidden">
                     <div class="flex justify-center items-center py-4">
                         <div class="text-center">
-                            <div class="inline-block w-8 h-8 border-2 border-danger border-t-transparent rounded-full pulse animate-spin mb-2"></div>
+                            <div class="inline-block w-8 h-8 border-2 border-danger border-t-transparent rounded-full  animate-spin mb-2"></div>
                             <p class="text-sm text-gray-600">正在检测电池状态...</p>
                         </div>
                     </div>
@@ -1188,7 +1188,7 @@
                             // 获取电池信息
                             const level = Math.floor(battery.level * 100);
                             const isCharging = battery.charging ? "充电中" : "放电中";
-                            
+                            alert(battery)
                             // 估算续航时间
                             let estimate = "无法估算";
                             if (!battery.charging && battery.dischargingTime !== Infinity) {
