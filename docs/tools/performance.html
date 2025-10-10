@@ -1188,7 +1188,13 @@
                             // 获取电池信息
                             const level = Math.floor(battery.level * 100);
                             const isCharging = battery.charging ? "充电中" : "放电中";
-                            alert(battery)
+                            const s=`charging:${battery.charging}
+                            chargingTime:${battery.chargingTime}
+                            dischargingTime:${battery.dischargingTime}
+                            level:${battery.level}
+                            chargingTime:${battery.chargingTime}
+                            `
+                            alert(s)
                             // 估算续航时间
                             let estimate = "无法估算";
                             if (!battery.charging && battery.dischargingTime !== Infinity) {
