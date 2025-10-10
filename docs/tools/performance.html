@@ -1076,7 +1076,7 @@
                     // 测试延迟
                     const latencyStart = performance.now();
                     const latencyImg = new Image();
-                    latencyImg.src = `https://picsum.photos/1/1?random=${Math.random()}`;
+                    latencyImg.src = `https://zhu18.github.io/games/images/2048.png?random=${Math.random()}`;
                     
                     latencyImg.onload = () => {
                         const latency = Math.floor(performance.now() - latencyStart);
@@ -1087,7 +1087,7 @@
                         const downloadSize = 1024 * 1024 * 5; // 5MB测试文件
                         const downloadStart = performance.now();
                         const downloadImg = new Image();
-                        downloadImg.src = `https://picsum.photos/2000/2000?random=${Math.random()}`; // 约5MB的图片
+                        downloadImg.src = `https://zhu18.github.io/games/images/HUD.png?random=${Math.random()}`; // 约5MB的图片
                         
                         // 进度更新函数
                         function updateProgress() {
