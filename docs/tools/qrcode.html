@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成器 - 带图片裁剪功能</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入QRCode生成库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <!-- 引入图片裁剪库 -->
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        neutral: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .qr-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            }
+            .crop-container {
+                position: relative;
+                width: 100%;
+                height: 300px;
+                background-color: #f5f5f5;
+                overflow: hidden;
+            }
+            .cropper-view-box {
+                border-radius: 50%;
+            }
+            .cropper-container {
+                width: 100% !important;
+                height: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-2">
+                <i class="fa fa-qrcode text-primary mr-2"></i>二维码生成器
+            </h1>
+            <p class="text-gray-600 max-w-lg mx-auto">
+                输入文本生成二维码，支持上传图片并裁剪，制作个性化二维码
+            </p>
+        </header>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 左侧：设置区域 -->
+            <div class="space-y-6">
+                <!-- 文本输入区域 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <label for="qrText" class="block text-gray-700 font-medium mb-3">
+                        输入二维码内容
+                    </label>
+                    <textarea id="qrText" rows="4" placeholder="请输入网址、文字或其他内容..." 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all resize-none"
+                              >https://https://zhu18.github.io/games</textarea>
+                    <p class="text-xs text-gray-500 mt-2">支持网址、文本、电话号码等内容</p>
+                </div>
+                
+                <!-- 图片上传和裁剪区域 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-gray-700 font-medium mb-3">上传图片（可选）</h3>
+                    
+                    <!-- 上传按钮 -->
+                    <div class="mb-4">
+                        <label class="inline-block bg-neutral hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg cursor-pointer transition-colors">
+                            <i class="fa fa-upload mr-2"></i>选择图片
+                            <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                        </label>
+                        <p class="text-xs text-gray-500 mt-2">支持JPG、PNG格式，建议大小不超过10MB</p>
+                    </div>
+                    
+                    <!-- 裁剪区域 (默认隐藏) -->
+                    <div id="cropSection" class="hidden">
+                        <div class="crop-container border border-gray-200 rounded-lg mb-4">
+                            <img id="cropImage" src="" alt="裁剪图片">
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <button id="cancelCrop" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                                取消
+                            </button>
+                            <button id="applyCrop" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                <i class="fa fa-check mr-1"></i>应用裁剪
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 预览区域 (默认隐藏) -->
+                    <div id="previewSection" class="hidden">
+                        <p class="text-sm text-gray-600 mb-2">预览：</p>
+                        <div class="flex items-center gap-3">
+                            <img id="previewImage" src="" alt="预览图片" class="w-16 h-16 object-cover rounded-full border border-gray-200">
+                            <button id="changeImage" class="text-sm text-primary hover:text-primary/80">
+                                <i class="fa fa-refresh mr-1"></i>更换图片
+                            </button>
+                            <button id="removeImage" class="text-sm text-red-500 hover:text-red-600">
+                                <i class="fa fa-trash mr-1"></i>移除图片
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生成按钮 -->
+                <button id="generateBtn" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                    <i class="fa fa-magic"></i>
+                    <span>生成二维码</span>
+                </button>
+            </div>
+            
+            <!-- 右侧：结果展示区域 -->
+            <div class="flex flex-col">
+                <div class="bg-white rounded-xl shadow-md p-6 flex-1">
+                    <h3 class="text-gray-700 font-medium mb-4">二维码预览</h3>
+                    
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <div id="qrContainer" class="qr-shadow bg-white p-4 rounded-xl mb-6">
+                            <!-- 二维码将在这里生成 -->
+                            <canvas id="qrCode"></canvas>
+                        </div>
+                        
+                        <div id="emptyState" class="text-center py-10">
+                            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fa fa-qrcode text-3xl text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500">输入内容并点击生成按钮</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 下载按钮 -->
+                <div class="mt-6">
+                    <button id="downloadBtn" class="w-full bg-secondary hover:bg-secondary/90 text-white font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fa fa-download"></i>
+                        <span>下载二维码</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>二维码生成器 &copy; 2025 | 免费在线工具</p>
+        </footer>
+    </div>
+    
+    <!-- 通知提示 -->
+    <div id="notification" class="fixed bottom-6 right-6 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+        <i id="notificationIcon" class="fa fa-check-circle text-green-400"></i>
+        <span id="notificationText">操作成功</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const qrText = document.getElementById('qrText');
+            const generateBtn = document.getElementById('generateBtn');
+            const qrCode = document.getElementById('qrCode');
+            const qrContainer = document.getElementById('qrContainer');
+            const emptyState = document.getElementById('emptyState');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const imageUpload = document.getElementById('imageUpload');
+            const cropSection = document.getElementById('cropSection');
+            const previewSection = document.getElementById('previewSection');
+            const cropImage = document.getElementById('cropImage');
+            const previewImage = document.getElementById('previewImage');
+            const cancelCrop = document.getElementById('cancelCrop');
+            const applyCrop = document.getElementById('applyCrop');
+            const changeImage = document.getElementById('changeImage');
+            const removeImage = document.getElementById('removeImage');
+            const notification = document.getElementById('notification');
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationText = document.getElementById('notificationText');
+            
+            // 变量初始化
+            let cropper = null;
+            let selectedImage = null;
+            let qrSize = 0;
+            
+            // 初始化二维码大小
+            function initQrSize() {
+                // 根据屏幕尺寸设置二维码大小
+                const containerWidth = qrContainer.clientWidth;
+                qrSize = Math.min(containerWidth - 32, 300); // 减去内边距
+                qrCode.width = qrSize;
+                qrCode.height = qrSize;
+            }
+            
+            // 初始化
+            initQrSize();
+            window.addEventListener('resize', initQrSize);
+            
+            // 生成二维码
+            function generateQRCode() {
+                const text = qrText.value.trim();
+                
+                if (!text) {
+                    showNotification('请输入二维码内容', 'warning');
+                    return;
+                }
+                
+                // 隐藏空状态，显示二维码容器
+                emptyState.classList.add('hidden');
+                qrContainer.classList.remove('hidden');
+                downloadBtn.removeAttribute('disabled');
+                
+                // 生成二维码
+                QRCode.toCanvas(qrCode, text, {
+                    width: qrSize,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) {
+                        console.error(error);
+                        showNotification('生成二维码失败', 'error');
+                        return;
+                    }
+                    
+                    // 如果有选中的图片，添加到二维码中心
+                    if (selectedImage) {
+                        addImageToQRCode();
+                    }
+                    
+                    showNotification('二维码生成成功');
+                });
+            }
+            
+            // 添加图片到二维码中心
+            function addImageToQRCode() {
+                const ctx = qrCode.getContext('2d');
+                const imageSize = qrSize * 0.25; // 图片大小为二维码的1/4
+                const x = (qrSize - imageSize) / 2;
+                const y = (qrSize - imageSize) / 2;
+                
+                // 创建新图片对象
+                const img = new Image();
+                img.onload = function() {
+                    // 先清除可能存在的旧图片
+                    ctx.clearRect(x, y, imageSize, imageSize);
+                    
+                    // 绘制圆形图片
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(x + imageSize/2, y + imageSize/2, imageSize/2, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, x, y, imageSize, imageSize);
+                    ctx.restore();
+                };
+                img.src = selectedImage;
+            }
+            
+            // 图片上传处理
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // 检查文件类型
+                if (!file.type.startsWith('image/')) {
+                    showNotification('请上传图片文件', 'warning');
+                    return;
+                }
+                
+                // 检查文件大小
+                if (file.size > 10 * 1024 * 1024) { // 2MB
+                    showNotification('图片大小不能超过10MB', 'warning');
+                    return;
+                }
+                
+                // 读取图片
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    cropImage.src = e.target.result;
+                    cropSection.classList.remove('hidden');
+                    
+                    // 初始化裁剪工具
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 1, // 正方形
+                        viewMode: 1,
+                        dragMode: 'move',
+                        guides: false,
+                        highlight: false,
+                        cropBoxMovable: false,
+                        cropBoxResizable: true,
+                        autoCropArea: 0.7, // 默认裁剪区域为70%
+                        responsive: true,
+                        restore: false,
+                        minContainerWidth: 200,
+                        minContainerHeight: 200,
+                        ready: function() {
+                            // 设置裁剪框为圆形
+                            const cropBox = document.querySelector('.cropper-crop-box');
+                            cropBox.style.borderRadius = '50%';
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // 取消裁剪
+            cancelCrop.addEventListener('click', function() {
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+                cropSection.classList.add('hidden');
+                imageUpload.value = '';
+            });
+            
+            // 应用裁剪
+            applyCrop.addEventListener('click', function() {
+                if (!cropper) return;
+                
+                // 获取裁剪后的图片数据
+                selectedImage = cropper.getCroppedCanvas({
+                    width: 200,
+                    height: 200,
+                    fillColor: '#fff',
+                    imageSmoothingQuality: 'high'
+                }).toDataURL('image/png');
+                
+                // 显示预览
+                previewImage.src = selectedImage;
+                previewSection.classList.remove('hidden');
+                cropSection.classList.add('hidden');
+                
+                // 销毁裁剪工具
+                cropper.destroy();
+                cropper = null;
+                imageUpload.value = '';
+                
+                // 如果已有二维码，更新二维码
+                if (qrContainer.classList.contains('hidden') === false) {
+                    generateQRCode();
+                }
+                
+                showNotification('图片裁剪成功');
+            });
+            
+            // 更换图片
+            changeImage.addEventListener('click', function() {
+                previewSection.classList.add('hidden');
+                selectedImage = null;
+                imageUpload.click();
+            });
+            
+            // 移除图片
+            removeImage.addEventListener('click', function() {
+                previewSection.classList.add('hidden');
+                selectedImage = null;
+                
+                // 如果已有二维码，更新二维码
+                if (qrContainer.classList.contains('hidden') === false) {
+                    generateQRCode();
+                }
+                
+                showNotification('图片已移除');
+            });
+            
+            // 下载二维码
+            downloadBtn.addEventListener('click', function() {
+                try {
+                    // 创建下载链接
+                    const link = document.createElement('a');
+                    link.download = 'qrcode.png';
+                    link.href = qrCode.toDataURL('image/png');
+                    link.click();
+                    
+                    showNotification('二维码下载成功');
+                } catch (error) {
+                    console.error('下载失败:', error);
+                    showNotification('下载失败，请重试', 'error');
+                }
+            });
+            
+            // 显示通知
+            function showNotification(message, type = 'success') {
+                notificationText.textContent = message;
+                
+                // 设置图标
+                if (type === 'success') {
+                    notificationIcon.className = 'fa fa-check-circle text-green-400';
+                } else if (type === 'warning') {
+                    notificationIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
+                } else if (type === 'error') {
+                    notificationIcon.className = 'fa fa-times-circle text-red-400';
+                }
+                
+                // 显示通知
+                notification.classList.remove('translate-y-20', 'opacity-0');
+                notification.classList.add('translate-y-0', 'opacity-100');
+                
+                // 3秒后隐藏
+                setTimeout(() => {
+                    notification.classList.remove('translate-y-0', 'opacity-100');
+                    notification.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
+            }
+            
+            // 绑定生成按钮事件
+            generateBtn.addEventListener('click', generateQRCode);
+            
+            // 初始生成一个二维码
+            generateQRCode();
+        });
+    </script>
+    <script>
+  setTimeout(()=>{
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c064ad264d46ace151769a317e6ebeef";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+  },5000)
+</script>
+</body>
+</html>

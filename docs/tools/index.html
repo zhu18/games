@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>常用小工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .tool-card {
+                transition: all 0.3s ease;
+            }
+            .tool-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+            }
+            .float {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-8px); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-wrench text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-primary">实用小工具</h1>
+            </div>
+            <div class="flex items-center space-x-4" style="display: none;">
+                <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-search text-gray-600"></i>
+                </button>
+                <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-user-o text-gray-600 text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="bg-gradient-to-r from-primary to-blue-600 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold mb-4">精选实用工具</h2>
+            <p class="max-w-md mx-auto text-blue-100 mb-6">无需下载安装，即开即用，满足您的日常需求</p>
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">免费使用</span>
+                <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">无需注册</span>
+                <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm">操作简单</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 分类标签 -->
+    <div class="container mx-auto px-4 py-5 hidden ">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold">工具分类</h3>
+        </div>
+        <div class="flex space-x-2 overflow-x-auto pb-2">
+            <button class="whitespace-nowrap px-4 py-2 bg-primary text-white rounded-full text-sm">全部工具</button>
+            <button class="whitespace-nowrap px-4 py-2 bg-white hover:bg-gray-100 rounded-full text-sm transition-colors">生活服务</button>
+            <button class="whitespace-nowrap px-4 py-2 bg-white hover:bg-gray-100 rounded-full text-sm transition-colors">办公效率</button>
+            <button class="whitespace-nowrap px-4 py-2 bg-white hover:bg-gray-100 rounded-full text-sm transition-colors">娱乐休闲</button>
+            <button class="whitespace-nowrap px-4 py-2 bg-white hover:bg-gray-100 rounded-full text-sm transition-colors">网络工具</button>
+        </div>
+    </div>
+
+    <!-- 工具列表 -->
+    <main class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 二维码生成器 -->
+            <a href="qrcode.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 float">
+                        <i class="fa fa-qrcode text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">二维码生成器</h3>
+                    <p class="text-gray-600 text-sm mb-4">输入文本或网址生成二维码，支持自定义样式和添加logo</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 12.5万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.9</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 打牌计费工具 -->
+            <a href="jifei.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 float" style="animation-delay: 0.2s">
+                        <i class="fa fa-gamepad text-secondary text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">打牌计费工具</h3>
+                    <p class="text-gray-600 text-sm mb-4">记录麻将、扑克游戏分数，自动计算费用，支持多人模式</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 8.7万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.8</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 性能测试工具 -->
+            <a href="performance.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 float" style="animation-delay: 0.4s">
+                        <i class="fa fa-dashboard text-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">手机性能测试工具</h3>
+                    <p class="text-gray-600 text-sm mb-4">全面评估您的设备性能，包括CPU、内存、显卡、网络和电池</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 15.2万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.7</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 单位换算工具 -->
+            <a href="unit-converter.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-exchange text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">单位换算工具</h3>
+                    <p class="text-gray-600 text-sm mb-4">支持长度、重量、温度等多种单位换算，精准便捷</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 7.3万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.6</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 倒计时工具 -->
+            <a href="countdown.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-clock-o text-red-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">倒计时工具</h3>
+                    <p class="text-gray-600 text-sm mb-4">设置目标日期，实时显示倒计时，支持自定义标题</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 6.8万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.5</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 待办清单工具 -->
+            <a href="todo-list.html" class="tool-card block">
+                <div class="bg-white rounded-xl shadow p-6 h-full">
+                    <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-check-square-o text-teal-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">待办清单工具</h3>
+                    <p class="text-gray-600 text-sm mb-4">记录待办事项，标记完成状态，支持分类管理</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span><i class="fa fa-eye mr-1"></i> 9.1万+使用</span>
+                        <span><i class="fa fa-star text-yellow-400 mr-1"></i> 4.8</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 加载更多按钮 -->
+        <div class="text-center mt-10">
+            <button class="px-6 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
+                <i class="fa fa-refresh mr-2"></i>加载更多工具
+            </button>
+        </div>
+    </main>
+
+    <!-- 底部信息 -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-sm text-gray-400">
+                <p>Powered by zhu18@vip.qq.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-6 right-6 w-10 h-10 bg-primary text-white rounded-full shadow flex items-center justify-center opacity-0 invisible transition-all">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 返回顶部按钮功能
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 分类标签切换效果
+        const categoryBtns = document.querySelectorAll('.rounded-full');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有按钮的选中状态
+                categoryBtns.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-white', 'hover:bg-gray-100');
+                });
+                // 设置当前按钮为选中状态
+                btn.classList.remove('bg-white', 'hover:bg-gray-100');
+                btn.classList.add('bg-primary', 'text-white');
+            });
+        });
+    </script>
+</body>
+</html>
